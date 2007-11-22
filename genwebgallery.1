@@ -1,0 +1,67 @@
+.TH GENWEBGALLERY 1 "genwebgallery-VERSION" "2007-11-21" "genwebgallery"
+
+.SH NAME
+genwebgallery
+
+.SH SYNOPSIS
+.B genwebgallery FILES
+
+.SH DESCRIPTION
+.B genwebgallery
+generates a web gallery of mentioned pictures.
+.PP
+Only static HTML pages are generated.
+.PP
+The
+.BR convert
+tool from ImageMagick is required.
+
+.SH OPTIONS
+.B genwebgallery
+.TP
+.B \-\-help
+Show summary of options.
+.TP
+.B \-\-version
+Show version of program
+.TP
+.B \-v, \-\-verbose
+Outputs more log data
+.TP
+.B \-o, \-\-output
+Specify output directory
+.TP
+.B \-i, \-\-index
+Specify index file (index.htm)
+.TP
+.B \-t, \-\-title
+Specify title of gallery
+.TP
+.B \-c, \-\-copyright
+Specify copyright notice
+.TP
+.B \-ps, \-\-pic-size
+Specify size of picture
+.TP
+.B \-ts, \-\-thumb-size
+Specify size of thumbnails
+
+.SH EXIT CODE
+.TP
+.B 1
+Any other error
+.TP
+.B 2
+The required program
+.B convert
+could not be found. It's probably not installed.
+Normally it is provided by the ImageMagick tool collection.
+
+.SH SEE ALSO
+.BR convert (1),
+.BR ImageMagick (1).
+
+.SH AUTHOR
+genwebgallery was written by markus schnalke <meillo@marmaro.de>
+.PP
+Website: http://prog.marmaro.de

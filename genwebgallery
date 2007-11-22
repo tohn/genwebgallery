@@ -1,0 +1,208 @@
+#!/bin/sh
+#
+# generates a web gallery of static web pages
+# requires: ImageMagick (convert)
+#
+# meillo@marmaro.de
+#
+
+
+targetDir="web"
+index="index.htm"
+sizePic=640
+sizeThumb=200
+galleryTitle="gallery title"
+copyright="please mind the copyright"
+
+verbose=""
+
+
+function checkCreateDir() {
+	if [ -d "$targetDir" ] ; then
+		echo "Target dir '$targetDir' already exists."
+		echo -n "remove it? [y/n] "
+
+		read remove
+		if [ $remove = "y" ] ; then
+			rm -r "$targetDir"
+			echo "removing '$targetDir' ..."
+		else
+			exit 1
+		fi
+	fi
+	mkdir -p "$targetDir"
+}
+
+
+
+function insertHeader() {
+  echo <<EOF
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<title>$titleName</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="Generator" content="genwebgallery - see http://prog.marmaro.de" />
+</head>
+<body>
+
+EOF
+}
+
+
+function insertFooter() {
+	echo <<EOF
+
+</body>
+</html>
+EOF
+}
+
+
+function log() {
+	if [ $verbose ] ; then
+		echo "$1";
+	fi
+}
+
+
+function checkConvert() {
+	log "checking convert installation"
+	(convert -version) 2> /dev/null > /dev/null
+	if [ $? -ne 0 ] ; then
+		echo "Error: Can not find 'convert' (package imagemagick)"
+		echo "ABORT!"
+		exit 2
+	fi
+	log "`convert -version`"
+}
+
+
+####
+
+
+
+if [ $# -eq 0 ] ; then
+	echo "usage: `basename $0` [OPTIONS] FILES"
+	exit 0
+fi
+
+
+while [  "$#" -ge 1  -a  "${1:0:1}" = '-'  ] ; do
+	case $1 in
+		'--version')
+			echo "genwebgallery version 0.3"
+			exit 0
+			;;
+		'--help')
+			echo "`basename $0`
+
+generates a web gallery consisting of html pages
+
+usage: `basename $0` [OPTIONS] FILES
+
+options:
+	--version: echo program version
+	--help: display this output
+	-v: be verbose
+	-o DIR: all generated content is copied to this folder
+	-i FILE: the name of the index file (index.htm)
+	-t TITLE: title of the gallery
+	-c COPYRIGHT: a copyright notice
+	-ps PIXELS: size of the pics
+	-ts PIXELS: size of the thumbnails
+
+author: meillo@marmaro.de
+homepage: http://prog.marmaro.de
+"
+			exit 0
+			;;
+		'-v' | '--verbose')
+			verbose=1
+			shift
+			;;
+		'-o' | '--output')
+			targetDir=$2
+			shift
+			shift
+			;;
+		'-i' | '--index')
+			index=$2
+			shift
+			shift
+			;;
+		'-t' | '--title')
+			galleryTitle=$2
+			shift
+			shift
+			;;
+		'-c' | '--copyright')
+			copyright=$2
+			shift
+			shift
+			;;
+		'-ps' | '--pic-size')
+			sizePic=$2
+			shift
+			shift
+			;;
+		'-ts' | '--thumb-size')
+			sizeThumb=$2
+			shift
+			shift
+			;;
+		*)
+			echo "invalid option: $1"
+			echo "see: `basename $0` --help"
+			exit 1
+	esac
+
+done
+
+if [ $# -eq 0 ] ; then
+	echo "usage: `basename $0` [OPTIONS] FILES"
+	exit 0
+fi
+
+
+# verbose output
+log "verbose on"
+log "output dir is: $targetDir"
+log "index file is: $index"
+log "gallery title is: $galleryTitle"
+log "copyright notice is: $copyright"
+log "picture size is: $sizePic"
+log "thumbnail size is: $sizeThumb"
+checkConvert
+log ""
+
+
+checkCreateDir
+
+insertHeader > "$targetDir/$index"
+echo "<h1>$galleryTitle</h1>" >> "$targetDir/$index"
+
+for i in "$@" ; do
+	file=`basename $i`
+	targetFile="$targetDir/$file.htm"
+	log "processing file: $file"
+
+	# generate pic page
+	insertHeader > "$targetFile"
+	echo "<h1>$galleryTitle</h1>" \
+	     "<p><a href=\"$index\"><img src=\"$file\" alt=\"$file\" /></a></p>" \
+	     "<p>$copyright</p>" >> "$targetFile"
+	insertFooter >> "$targetFile"
+
+	# copy and resize pics
+	convert "$i" -resize ${sizePic}x${sizePic} "$targetDir/$file"
+	convert "$i" -resize ${sizeThumb}x${sizeThumb} "$targetDir/_$file"
+
+	# generate content for index file
+	echo "    <a href=\"$file.htm\"><img src=\"_$file\" alt=\"$file\" /></a>" >> "$targetDir/$index"
+done
+
+echo "<p>$copyright</p>" >> "$targetDir/$index"
+insertFooter >> "$targetDir/$index"

@@ -1,0 +1,16 @@
+Source: genwebgallery
+Section: web
+Priority: extra
+Maintainer: markus schnalke <meillo@marmaro.de>
+Build-Depends: debhelper (>= 5)
+Standards-Version: 3.7.2
+
+Package: genwebgallery
+Architecture: all
+Depends: ${shlibs:Depends}, ${misc:Depends}, imagemagick
+Description: generates a web gallery with static html
+ *** unofficial package from meillo@marmaro.de ***
+ .
+ Very simple tool to generate static html pages to view pictures on the web.
+ .
+ Homepage: http://prog.marmaro.de
