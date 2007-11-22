@@ -4,4 +4,4 @@ syntax: glob
 
 Packages
 *.tar.gz
-CHANGELOG
+ChangeLog

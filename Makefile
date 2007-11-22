@@ -5,7 +5,7 @@ NAME=genwebgallery
 VERSION = 0.3
 NV=${NAME}-${VERSION}
 
-DOCS=COPYRIGHT CHANGELOG TODO
+DOCS=COPYRIGHT ChangeLog TODO
  
 # paths 
 PREFIX = /usr
@@ -38,7 +38,7 @@ deb: dist
 
 changelog:
 	@echo generating changelog from mercurial log
-	@hg log -v --style changelog > CHANGELOG
+	@hg log -v --style changelog > ChangeLog
 
 install:
 	@echo installing executable file to ${DESTDIR}${BINDIR}
