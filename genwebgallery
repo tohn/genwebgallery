@@ -7,6 +7,8 @@
 #
 
 
+VERSION=0.3
+
 targetDir="web"
 index="index.htm"
 sizePic=640
@@ -93,7 +95,7 @@ fi
 while [  "$#" -ge 1  -a  "${1:0:1}" = '-'  ] ; do
 	case $1 in
 		'--version')
-			echo "genwebgallery version 0.3"
+			echo "genwebgallery version $VERSION"
 			exit 0
 			;;
 		'--help')

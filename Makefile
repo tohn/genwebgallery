@@ -4,6 +4,8 @@
 NAME=genwebgallery
 VERSION = 0.3
 NV=${NAME}-${VERSION}
+
+DOCS=COPYRIGHT CHANGELOG TODO
  
 # paths 
 PREFIX = /usr
@@ -16,11 +18,27 @@ all:
 build:
 	@echo build unneeded
 
-dist:
+dist: changelog
 	@mkdir ${NV}
-	@cp -f ${NAME} ${NAME}.1 Makefile TODO COPYRIGHT ${NV}
+	@cp -f ${NAME} ${NAME}.1 Makefile ${DOCS} ${NV}
 	@tar -czhof ${NV}.tar.gz ${NV}
 	@rm -rf ${NV}
+
+deb: dist
+	@mkdir -p Packages
+	@cp ${NV}.tar.gz Packages/
+	( \
+		cd Packages/ ;\
+		tar -xzf ${NV}.tar.gz ;\
+		mv ${NV}.tar.gz ${NAME}_${VERSION}.orig.tar.gz ;\
+		cd ${NV}/ ;\
+		cp -r ../../debian/ . ;\
+		debuild ;\
+	 )
+
+changelog:
+	@echo generating changelog from mercurial log
+	@hg log -v --style changelog > CHANGELOG
 
 install:
 	@echo installing executable file to ${DESTDIR}${BINDIR}
@@ -38,26 +56,14 @@ uninstall:
 	@echo removing manual page from ${DESTDIR}${MANDIR}/man1
 	@rm -f ${DESTDIR}${MANDIR}/man1/${NAME}.1
 
-deb: dist
-	@mkdir -p Packages
-	@cp ${NV}.tar.gz Packages/
-	( \
-		cd Packages/ ;\
-		tar -xzf ${NV}.tar.gz ;\
-		mv ${NV}.tar.gz ${NAME}_${VERSION}.orig.tar.gz ;\
-		cd ${NV}/ ;\
-		cp -r ../../debian/ . ;\
-		debuild ;\
-	 )
-
 clean:
 	@echo clean unneeded
 
 distclean: clean
-	@rm -f ${NAME}-*.tar.gz
+	@rm -f ${NAME}-*.tar.gz CHANGELOG
 
-debclean:
+debclean: distclean
 	@cd Packages/${NV}/ ; debuild clean ;
 
 
-.PHONY: all clean build install uninstall
+.PHONY: all dist deb changelog clean distclean debclean build install uninstall
