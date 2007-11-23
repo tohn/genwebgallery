@@ -27,7 +27,7 @@ dist: changelog
 deb: dist
 	@mkdir -p Packages
 	@cp ${NV}.tar.gz Packages/
-	( \
+	@( \
 		cd Packages/ ;\
 		tar -xzf ${NV}.tar.gz ;\
 		mv ${NV}.tar.gz ${NAME}_${VERSION}.orig.tar.gz ;\
