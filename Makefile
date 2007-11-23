@@ -60,7 +60,7 @@ clean:
 	@echo clean unneeded
 
 distclean: clean
-	@rm -f ${NAME}-*.tar.gz CHANGELOG
+	@rm -f ${NAME}-*.tar.gz ChangeLog
 
 debclean: distclean
 	@cd Packages/${NV}/ ; debuild clean ;
