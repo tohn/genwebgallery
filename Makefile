@@ -2,7 +2,7 @@
 
 
 NAME=genwebgallery
-VERSION = 0.3
+VERSION = 0.4
 NV=${NAME}-${VERSION}
 
 DOCS=COPYRIGHT ChangeLog TODO
