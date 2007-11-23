@@ -1,96 +1,143 @@
 #!/bin/sh
 #
-# generates a web gallery of static web pages
+# generates a web gallery
 # requires: ImageMagick (convert)
 #
 # meillo@marmaro.de
 #
 
 
-VERSION=0.3
+VERSION=0.4
 
-targetDir="web"
-index="index.htm"
-sizePic=640
-sizeThumb=200
-galleryTitle="gallery title"
-copyright="please mind the copyright"
+verbose="no"
+targetDir="webgallery"
+overwrite="no"
+index="index.html"
+sizePic=800
+sizeThumb=150
+galleryTitle="photo gallery"
+copyright=""
 
-verbose=""
+
 
 
 function checkCreateDir() {
-	if [ -d "$targetDir" ] ; then
-		echo "Target dir '$targetDir' already exists."
-		echo -n "remove it? [y/n] "
+	remove="no"
+	if [ -e "$targetDir" ] ; then
+		if [ "$overwrite" = "no" ] ; then
+			echo "output directory '$targetDir' already exists."
+			echo -n "remove it? [y/n] "
+			read remove
+		fi
 
-		read remove
-		if [ $remove = "y" ] ; then
-			rm -r "$targetDir"
+		if [ "$remove" = "y" -o "$overwrite" = "yes" ] ; then
 			echo "removing '$targetDir' ..."
+			rm -r "$targetDir"
+			if [ $? -ne 0 ] ; then
+				echo "ABORT"
+				exit 4
+			fi
 		else
-			exit 1
+			echo "keep output directory"
+			echo "ABORT"
+			exit 3
 		fi
 	fi
+
 	mkdir -p "$targetDir"
 }
 
 
 
+
 function insertHeader() {
-  echo <<EOF
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
-  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  echo "
+<?xml version=\"1.0\" encoding=\"utf-8\"?>
+<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\"
+  \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">
+<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">
 <head>
 <title>$titleName</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <meta name="Generator" content="genwebgallery - see http://prog.marmaro.de" />
+<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />
+  <meta name=\"Generator\" content=\"genwebgallery - http://prog.marmaro.de\" />
 </head>
 <body>
 
-EOF
+"
 }
+
 
 
 function insertFooter() {
-	echo <<EOF
+	echo "
 
 </body>
 </html>
-EOF
+"
 }
+
 
 
 function log() {
-	if [ $verbose ] ; then
+	if [ $verbose = "yes" ] ; then
 		echo "$1";
 	fi
 }
+
 
 
 function checkConvert() {
 	log "checking convert installation"
 	(convert -version) 2> /dev/null > /dev/null
 	if [ $? -ne 0 ] ; then
-		echo "Error: Can not find 'convert' (package imagemagick)"
-		echo "ABORT!"
+		echo "Can not find 'convert' (package imagemagick)"
+		echo "ABORT"
 		exit 2
 	fi
+	log "convert found:"
 	log "`convert -version`"
 }
 
 
-####
 
-
-
-if [ $# -eq 0 ] ; then
+function usage() {
 	echo "usage: `basename $0` [OPTIONS] FILES"
-	exit 0
-fi
+	exit 1
+}
 
+
+
+function help() {
+	echo "`basename $0`
+
+generates a web gallery consisting of html pages
+
+usage: `basename $0` [OPTIONS] PICTURES
+
+options:
+	--version   print program version
+	--help      display this output
+	-v          be verbose ($verbose)
+	-o DIR      folder where generated files go to ($targetDir)
+	-i FILE     the name of the index file ($index)
+	-t TEXT     title of the gallery ($galleryTitle)
+	-c TEXT     a copyright notice ($copyright)
+	-ps PIXELS  size of the pics ($sizePic)
+	-ts PIXELS  size of the thumbnails ($sizeThumb)
+	--overwrite overwrite output directory ($overwrite)
+
+for more information see man page: genwebgallery(1)
+
+author: meillo@marmaro.de
+homepage: http://prog.marmaro.de
+"
+	exit 0
+}
+
+
+
+
+# option processing
 
 while [  "$#" -ge 1  -a  "${1:0:1}" = '-'  ] ; do
 	case $1 in
@@ -99,34 +146,14 @@ while [  "$#" -ge 1  -a  "${1:0:1}" = '-'  ] ; do
 			exit 0
 			;;
 		'--help')
-			echo "`basename $0`
-
-generates a web gallery consisting of html pages
-
-usage: `basename $0` [OPTIONS] FILES
-
-options:
-	--version: echo program version
-	--help: display this output
-	-v: be verbose
-	-o DIR: all generated content is copied to this folder
-	-i FILE: the name of the index file (index.htm)
-	-t TITLE: title of the gallery
-	-c COPYRIGHT: a copyright notice
-	-ps PIXELS: size of the pics
-	-ts PIXELS: size of the thumbnails
-
-author: meillo@marmaro.de
-homepage: http://prog.marmaro.de
-"
-			exit 0
+			help
 			;;
 		'-v' | '--verbose')
-			verbose=1
+			verbose="yes"
 			shift
 			;;
 		'-o' | '--output')
-			targetDir=$2
+			targetDir="$2"
 			shift
 			shift
 			;;
@@ -136,7 +163,7 @@ homepage: http://prog.marmaro.de
 			shift
 			;;
 		'-t' | '--title')
-			galleryTitle=$2
+			galleryTitle="$2"
 			shift
 			shift
 			;;
@@ -155,6 +182,10 @@ homepage: http://prog.marmaro.de
 			shift
 			shift
 			;;
+		'--overwrite')
+			overwrite="yes"
+			shift
+			;;
 		*)
 			echo "invalid option: $1"
 			echo "see: `basename $0` --help"
@@ -164,39 +195,51 @@ homepage: http://prog.marmaro.de
 done
 
 if [ $# -eq 0 ] ; then
-	echo "usage: `basename $0` [OPTIONS] FILES"
-	exit 0
+	usage
 fi
 
 
-# verbose output
-log "verbose on"
-log "output dir is: $targetDir"
-log "index file is: $index"
-log "gallery title is: $galleryTitle"
-log "copyright notice is: $copyright"
-log "picture size is: $sizePic"
-log "thumbnail size is: $sizeThumb"
-checkConvert
-log ""
 
+# verbose output
+log "verbose:              $verbose"
+log
+log "output dir:           $targetDir"
+log "index file:           $index"
+log "gallery title:        $galleryTitle"
+log "copyright notice:     $copyright"
+log "picture size:         ${sizePic}px"
+log "thumbnail size:       ${sizeThumb}px"
+log "overwrite output dir: $overwrite"
+log
+checkConvert
+log
+
+
+
+# generate web gallery
 
 checkCreateDir
 
-insertHeader > "$targetDir/$index"
-echo "<h1>$galleryTitle</h1>" >> "$targetDir/$index"
+echo `insertHeader` > "$targetDir/$index"
+if [ "$galleryTitle" != "" ] ; then
+	echo "<h1>$galleryTitle</h1>" >> "$targetDir/$index"
+fi
 
 for i in "$@" ; do
-	file=`basename $i`
+	file="`basename $i`"
 	targetFile="$targetDir/$file.htm"
 	log "processing file: $file"
 
 	# generate pic page
-	insertHeader > "$targetFile"
-	echo "<h1>$galleryTitle</h1>" \
-	     "<p><a href=\"$index\"><img src=\"$file\" alt=\"$file\" /></a></p>" \
-	     "<p>$copyright</p>" >> "$targetFile"
-	insertFooter >> "$targetFile"
+	echo `insertHeader` > "$targetFile"
+	if [ "$galleryTitle" != "" ] ; then
+		echo "<h1>$galleryTitle</h1>" >> "$targetFile"
+	fi
+	echo "<p><a href=\"$index\"><img src=\"$file\" alt=\"$file\" /></a></p>" >> "$targetFile"
+	if [ "$copyright" != "" ] ; then
+		echo "<p>$copyright</p>" >> "$targetFile"
+	fi
+	echo `insertFooter` >> "$targetFile"
 
 	# copy and resize pics
 	convert "$i" -resize ${sizePic}x${sizePic} "$targetDir/$file"
@@ -206,5 +249,7 @@ for i in "$@" ; do
 	echo "    <a href=\"$file.htm\"><img src=\"_$file\" alt=\"$file\" /></a>" >> "$targetDir/$index"
 done
 
-echo "<p>$copyright</p>" >> "$targetDir/$index"
-insertFooter >> "$targetDir/$index"
+if [ "$copyright" != "" ] ; then
+	echo "<p>$copyright</p>" >> "$targetDir/$index"
+fi
+echo `insertFooter` >> "$targetDir/$index"

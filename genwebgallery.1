@@ -4,20 +4,19 @@
 genwebgallery
 
 .SH SYNOPSIS
-.B genwebgallery [OPTIONS] FILES
+.B genwebgallery [OPTIONS] PICTURES
 
 .SH DESCRIPTION
 .B genwebgallery
-generates a web gallery of mentioned pictures.
+Generates a web gallery of mentioned pictures. Only very minimalistic static HTML pages are generated. Copies of the pictures get resized to the defined sizes.
 .PP
-Only static HTML pages are generated.
+All generated content goes in a subdirectory which defaults to 'webgallery'. Or any other directory specified by --output.
 .PP
 The
 .BR convert
 tool from ImageMagick is required.
 
 .SH OPTIONS
-.B genwebgallery
 .TP
 .B \-\-help
 Show summary of options.
@@ -45,6 +44,14 @@ Specify size of picture
 .TP
 .B \-ts, \-\-thumb-size
 Specify size of thumbnails
+.TP
+.B \-\-overwrite
+Overwrites the output directory if it exists without asking.
+Without this option, the users is interactively asked what to do.
+.PP
+See
+.B genwebgallery --help
+for default values.
 
 .SH EXIT CODE
 .TP
@@ -56,12 +63,18 @@ The required program
 .B convert
 could not be found. It's probably not installed.
 Normally it is provided by the ImageMagick tool collection.
+.TP
+.B 3
+The output directory already exists and the user wanted to keep it.
+.TP
+.B 4
+The output directory already exists and the user wanted it to be deleted, but it was not possible.
 
 .SH SEE ALSO
 .BR convert (1),
 .BR ImageMagick (1).
 
 .SH AUTHOR
-genwebgallery was written by markus schnalke <meillo@marmaro.de>
+genwebgallery and this man page was written by markus schnalke <meillo@marmaro.de>
 .PP
 Website: http://prog.marmaro.de
