@@ -1,3 +1,11 @@
+genwebgallery (0.4-2) unstable; urgency=low
+
+  * fixed hyphen-minus-conflict in man page
+  * refactored debian/rules (deleted a lot)
+
+ -- markus schnalke <meillo@marmaro.de>  Sat, 24 Nov 2007 23:10:34 +0100
+
+
 genwebgallery (0.4-1) unstable; urgency=low
 
   * new upstream version
