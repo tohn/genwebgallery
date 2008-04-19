@@ -3,3 +3,4 @@ TODO:
 - security checks
 - navigation in pic pages (really?)
 - verify that input files are images
+- verify picture and thumbnail sizes are numbers

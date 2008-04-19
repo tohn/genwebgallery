@@ -16,7 +16,7 @@ overwrite="no"
 index="index.html"
 sizePic=800
 sizeThumb=150
-galleryTitle="photo gallery"
+galleryTitle=""
 copyright=""
 
 
@@ -101,7 +101,7 @@ checkConvert() {
 
 
 usage() {
-	echo "usage: $PROGRAM [OPTIONS] FILES"
+	echo "usage: $PROGRAM [OPTIONS] PICTURES"
 	exit 1
 }
 
@@ -139,7 +139,7 @@ homepage: http://prog.marmaro.de
 
 # option processing
 
-while [  "$#" -ge 1  -a  `echo "$1" | awk '{print substr($0,1,1)}'` = '-'  ] ; do
+while [ "$#" -ge 1 ] && [ `echo "$1" | awk '{print substr($0,1,1)}'` = '-'  ] ; do
 	case $1 in
 		'--version')
 			echo "$PROGRAM version $VERSION"
