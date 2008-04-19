@@ -21,7 +21,7 @@ copyright=""
 
 
 
-function checkCreateDir() {
+checkCreateDir() {
 	remove="no"
 	if [ -e "$targetDir" ] ; then
 		if [ "$overwrite" = "no" ] ; then
@@ -50,7 +50,7 @@ function checkCreateDir() {
 
 
 
-function insertHeader() {
+insertHeader() {
   echo "
 <?xml version=\"1.0\" encoding=\"utf-8\"?>
 <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\"
@@ -68,7 +68,7 @@ function insertHeader() {
 
 
 
-function insertFooter() {
+insertFooter() {
 	echo "
 
 </body>
@@ -78,7 +78,7 @@ function insertFooter() {
 
 
 
-function log() {
+log() {
 	if [ $verbose = "yes" ] ; then
 		echo "$1";
 	fi
@@ -86,7 +86,7 @@ function log() {
 
 
 
-function checkConvert() {
+checkConvert() {
 	log "checking convert installation"
 	(convert -version) 2> /dev/null > /dev/null
 	if [ $? -ne 0 ] ; then
@@ -100,14 +100,14 @@ function checkConvert() {
 
 
 
-function usage() {
+usage() {
 	echo "usage: `basename $0` [OPTIONS] FILES"
 	exit 1
 }
 
 
 
-function help() {
+help() {
 	echo "`basename $0`
 
 generates a web gallery consisting of html pages
@@ -139,7 +139,7 @@ homepage: http://prog.marmaro.de
 
 # option processing
 
-while [  "$#" -ge 1  -a  "${1:0:1}" = '-'  ] ; do
+while [  "$#" -ge 1  -a  `echo "$1" | awk '{print substr($0,1,1)}'` = '-'  ] ; do
 	case $1 in
 		'--version')
 			echo "genwebgallery version $VERSION"

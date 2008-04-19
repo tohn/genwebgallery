@@ -33,7 +33,7 @@ deb: dist
 		mv ${NV}.tar.gz ${NAME}_${VERSION}.orig.tar.gz ;\
 		cd ${NV}/ ;\
 		cp -r ../../debian/ . ;\
-		debuild ;\
+		debuild -as ;\
 	 )
 
 changelog:
