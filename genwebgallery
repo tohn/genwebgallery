@@ -7,7 +7,8 @@
 #
 
 
-VERSION=0.4
+PROGRAM=genwebgallery
+VERSION=0.5
 
 verbose="no"
 targetDir="webgallery"
@@ -26,7 +27,7 @@ checkCreateDir() {
 	if [ -e "$targetDir" ] ; then
 		if [ "$overwrite" = "no" ] ; then
 			echo "output directory '$targetDir' already exists."
-			echo -n "remove it? [y/n] "
+			printf "remove it? [y/n] "
 			read remove
 		fi
 
@@ -88,8 +89,7 @@ log() {
 
 checkConvert() {
 	log "checking convert installation"
-	(convert -version) 2> /dev/null > /dev/null
-	if [ $? -ne 0 ] ; then
+	if [ ! `command -v convert` ] ; then
 		echo "Can not find 'convert' (package imagemagick)"
 		echo "ABORT"
 		exit 2
@@ -101,18 +101,18 @@ checkConvert() {
 
 
 usage() {
-	echo "usage: `basename $0` [OPTIONS] FILES"
+	echo "usage: $PROGRAM [OPTIONS] FILES"
 	exit 1
 }
 
 
 
 help() {
-	echo "`basename $0`
+	echo "$PROGRAM
 
 generates a web gallery consisting of html pages
 
-usage: `basename $0` [OPTIONS] PICTURES
+usage: $PROGRAM [OPTIONS] PICTURES
 
 options:
 	--version   print program version
@@ -122,11 +122,11 @@ options:
 	-i FILE     the name of the index file ($index)
 	-t TEXT     title of the gallery ($galleryTitle)
 	-c TEXT     a copyright notice ($copyright)
-	-ps PIXELS  size of the pics ($sizePic)
+	-ps PIXELS  size of the pictures ($sizePic)
 	-ts PIXELS  size of the thumbnails ($sizeThumb)
 	--overwrite overwrite output directory ($overwrite)
 
-for more information see man page: genwebgallery(1)
+for more information see man page: $PROGRAM(1)
 
 author: meillo@marmaro.de
 homepage: http://prog.marmaro.de
@@ -142,7 +142,7 @@ homepage: http://prog.marmaro.de
 while [  "$#" -ge 1  -a  `echo "$1" | awk '{print substr($0,1,1)}'` = '-'  ] ; do
 	case $1 in
 		'--version')
-			echo "genwebgallery version $VERSION"
+			echo "$PROGRAM version $VERSION"
 			exit 0
 			;;
 		'--help')
@@ -188,7 +188,7 @@ while [  "$#" -ge 1  -a  `echo "$1" | awk '{print substr($0,1,1)}'` = '-'  ] ; d
 			;;
 		*)
 			echo "invalid option: $1"
-			echo "see: `basename $0` --help"
+			echo "see: $PROGRAM --help"
 			exit 1
 	esac
 

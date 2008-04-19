@@ -8,9 +8,17 @@ Standards-Version: 3.7.2
 Package: genwebgallery
 Architecture: all
 Depends: ${shlibs:Depends}, ${misc:Depends}, imagemagick
-Description: generates a web gallery with static html
+Description: generates a minimalistic web gallery
  *** unofficial package from meillo@marmaro.de ***
  .
- Very simple tool to generate static html pages to view pictures on the web.
+ Very simple tool to generate static HTML pages to view
+ pictures on the web.
+ The generated pages are not very beautiful, but simple.
+ They contain just what is really needed - no fancy stuff.
+ Also the generation process is only one program call. You
+ can specify some configuration options like the dimension
+ of the created thumbnails, the name of the index page and
+ some more.
+ All image processing is done via ImageMagick.
  .
  Homepage: http://prog.marmaro.de

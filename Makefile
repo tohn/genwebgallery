@@ -2,12 +2,12 @@
 
 
 NAME=genwebgallery
-VERSION = 0.4
+VERSION = 0.5
 NV=${NAME}-${VERSION}
 
 DOCS=COPYRIGHT ChangeLog TODO
- 
-# paths 
+
+# paths
 PREFIX = /usr
 BINDIR = ${PREFIX}/bin
 MANDIR = ${PREFIX}/share/man
