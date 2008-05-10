@@ -21,7 +21,7 @@ build:
 dist: changelog
 	@mkdir ${NV}
 	@cp -f ${NAME} ${NAME}.1 Makefile ${DOCS} ${NV}
-	@tar -czhof ${NV}.tar.gz ${NV}
+	@tar -czho --owner 0 --group 0 -f ${NV}.tar.gz ${NV}
 	@rm -rf ${NV}
 
 deb: dist
