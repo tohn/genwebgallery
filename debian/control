@@ -8,9 +8,7 @@ Standards-Version: 3.7.2
 Package: genwebgallery
 Architecture: all
 Depends: imagemagick
-Description: generates a minimalistic web gallery
- *** unofficial package from meillo@marmaro.de ***
- .
+Description: generates minimalistic web gallerys
  Very simple tool to generate static HTML pages to view
  pictures on the web.
  The generated pages are not very beautiful, but simple.
@@ -21,4 +19,4 @@ Description: generates a minimalistic web gallery
  some more.
  All image processing is done via ImageMagick.
  .
- Homepage: http://prog.marmaro.de
+ Homepage: http://prog.marmaro.de/genwebgallery
