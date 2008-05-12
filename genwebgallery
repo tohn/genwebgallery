@@ -17,7 +17,7 @@ index="index.html"
 sizePic=800
 sizeThumb=150
 galleryTitle=""
-copyright=""
+footer=""
 
 
 
@@ -60,7 +60,7 @@ insertHeader() {
 <head>
 <title>$titleName</title>
 <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />
-  <meta name=\"Generator\" content=\"genwebgallery - http://prog.marmaro.de\" />
+  <meta name=\"Generator\" content=\"genwebgallery - http://prog.marmaro.de/genwebgallery\" />
 </head>
 <body>
 
@@ -121,7 +121,7 @@ options:
 	-o DIR      folder where generated files go to ($targetDir)
 	-i FILE     the name of the index file ($index)
 	-t TEXT     title of the gallery ($galleryTitle)
-	-c TEXT     a copyright notice ($copyright)
+	-f TEXT     footer text ($footer)
 	-ps PIXELS  size of the pictures ($sizePic)
 	-ts PIXELS  size of the thumbnails ($sizeThumb)
 	--overwrite overwrite output directory ($overwrite)
@@ -129,7 +129,7 @@ options:
 for more information see man page: $PROGRAM(1)
 
 author: meillo@marmaro.de
-homepage: http://prog.marmaro.de
+homepage: http://prog.marmaro.de/genwebgallery
 "
 	exit 0
 }
@@ -167,8 +167,8 @@ while [ "$#" -ge 1 ] && [ `echo "$1" | awk '{print substr($0,1,1)}'` = '-'  ] ; 
 			shift
 			shift
 			;;
-		'-c' | '--copyright')
-			copyright=$2
+		'-f' | '--footer')
+			footer=$2
 			shift
 			shift
 			;;
@@ -206,7 +206,7 @@ log
 log "output dir:           $targetDir"
 log "index file:           $index"
 log "gallery title:        $galleryTitle"
-log "copyright notice:     $copyright"
+log "footer text:          $footer"
 log "picture size:         ${sizePic}px"
 log "thumbnail size:       ${sizeThumb}px"
 log "overwrite output dir: $overwrite"
@@ -236,8 +236,8 @@ for i in "$@" ; do
 		echo "<h1>$galleryTitle</h1>" >> "$targetFile"
 	fi
 	echo "<p><a href=\"$index\"><img src=\"$file\" alt=\"$file\" /></a></p>" >> "$targetFile"
-	if [ "$copyright" != "" ] ; then
-		echo "<p>$copyright</p>" >> "$targetFile"
+	if [ "$footer" != "" ] ; then
+		echo "<p>$footer</p>" >> "$targetFile"
 	fi
 	echo `insertFooter` >> "$targetFile"
 
@@ -249,7 +249,7 @@ for i in "$@" ; do
 	echo "    <a href=\"$file.htm\"><img src=\"_$file\" alt=\"$file\" /></a>" >> "$targetDir/$index"
 done
 
-if [ "$copyright" != "" ] ; then
-	echo "<p>$copyright</p>" >> "$targetDir/$index"
+if [ "$footer" != "" ] ; then
+	echo "<p>$footer</p>" >> "$targetDir/$index"
 fi
 echo `insertFooter` >> "$targetDir/$index"
