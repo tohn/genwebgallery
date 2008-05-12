@@ -230,6 +230,14 @@ for i in "$@" ; do
 	targetFile="$targetDir/$file.htm"
 	log "processing file: $file"
 
+	# copy and resize pics
+	convert "$i" -resize ${sizePic}x${sizePic} "$targetDir/$file"
+	if [ $? -ne 0 ] ; then
+		log "  skipping"
+		continue
+	fi
+	convert "$i" -resize ${sizeThumb}x${sizeThumb} "$targetDir/_$file"
+
 	# generate pic page
 	echo `insertHeader` > "$targetFile"
 	if [ "$galleryTitle" != "" ] ; then
@@ -240,10 +248,6 @@ for i in "$@" ; do
 		echo "<p>$footer</p>" >> "$targetFile"
 	fi
 	echo `insertFooter` >> "$targetFile"
-
-	# copy and resize pics
-	convert "$i" -resize ${sizePic}x${sizePic} "$targetDir/$file"
-	convert "$i" -resize ${sizeThumb}x${sizeThumb} "$targetDir/_$file"
 
 	# generate content for index file
 	echo "    <a href=\"$file.htm\"><img src=\"_$file\" alt=\"$file\" /></a>" >> "$targetDir/$index"
