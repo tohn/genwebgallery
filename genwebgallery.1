@@ -1,4 +1,4 @@
-.TH GENWEBGALLERY 1 "genwebgallery\-0.5" "2007\-11\-21" "genwebgallery"
+.TH GENWEBGALLERY 1 "genwebgallery\-0.5" "2008\-05\-12" "genwebgallery"
 
 .SH NAME
 genwebgallery
@@ -11,6 +11,10 @@ genwebgallery
 Generates a web gallery of mentioned pictures. Only very minimalistic static HTML pages are generated. Copies of the pictures are resized to the defined sizes.
 .PP
 All generated content goes in a subdirectory which defaults to 'webgallery'. Or any other directory specified by \-\-output.
+.PP
+Files are skipped if
+.B convert
+fails in conversion.
 .PP
 The
 .BR convert
@@ -70,11 +74,19 @@ The output directory already exists and the user wanted to keep it.
 .B 4
 The output directory already exists and the user wanted it to be deleted, but it was not possible.
 
+.SH BUGS
+.B convert
+fails the conversion of the XCF image format of GIMP, but it exits with 0 anyway. This looks like a bug in the
+.B convert
+program.
+As result the image is added to the gallery but it is not viewable.
+Other formats might be affected as well.
+
 .SH SEE ALSO
 .BR convert (1),
 .BR ImageMagick (1).
 
 .SH AUTHOR
-genwebgallery and this man page was written by markus schnalke <meillo@marmaro.de>
+genwebgallery and this man page were written by markus schnalke <meillo@marmaro.de>
 .PP
 Website: http://prog.marmaro.de/genwebgallery
