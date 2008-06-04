@@ -9,7 +9,7 @@
 
 
 PROGRAM=genwebgallery
-VERSION=0.5
+VERSION=0.6
 
 verbose="no"
 targetDir="webgallery"
