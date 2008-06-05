@@ -1,4 +1,4 @@
-.TH GENWEBGALLERY 1 "genwebgallery\-0.5" "2008\-06\-04" "genwebgallery"
+.TH GENWEBGALLERY 1 "genwebgallery\-0.7" "2008\-06\-05" "genwebgallery"
 
 .SH NAME
 genwebgallery \- generates  minimalistic web galleries
@@ -10,7 +10,9 @@ genwebgallery \- generates  minimalistic web galleries
 .B genwebgallery
 Generates a web gallery of mentioned pictures. Only very minimalistic static HTML pages are generated. Copies of the pictures are resized to the defined sizes.
 .PP
-All generated content goes in a subdirectory which defaults to 'webgallery'. Or any other directory specified by \-\-output.
+All generated content goes in a subdirectory which defaults to
+.IR webgallery .
+Or any other directory specified by \-\-output.
 .PP
 Files are skipped if
 .B convert
@@ -35,13 +37,13 @@ Outputs more log data
 Specify output directory
 .TP
 .B \-i, \-\-index
-Specify index file (index.htm)
+Specify index file
 .TP
 .B \-t, \-\-title
 Specify title of gallery
 .TP
-.B \-c, \-\-copyright
-Specify copyright notice
+.B \-f, \-\-footer
+Specify footer text
 .TP
 .B \-ps, \-\-pic\-size
 Specify size of pictures
@@ -56,6 +58,27 @@ Without this option, the users is interactively asked what to do.
 See
 .B genwebgallery \-\-help
 for default values.
+
+.SH EXAMPLES
+To create an image gallery as fast as possible, simply call the program with the pictures you want as arguments.
+.IP
+genwebgallery *.jpg
+.PP
+The program creates a directory
+.I webgallery
+which contains a
+.I index.html
+and each picture in large, small and a HTML for it.
+.PP
+If you want to customize the output
+.IP
+genwebgallery -o holiday2008 -t "Trip to Hawaii" ~/hawaii08/*.jpg
+.PP
+Creates a directory
+.I holiday2008
+which contains a
+.I index.html
+and each picture in large, small and a HTML for it. All HTML pages are titled with ``Trip to Hawaii''.
 
 .SH EXIT CODE
 .TP
