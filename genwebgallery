@@ -92,17 +92,19 @@ log() {
 
 
 checkResizer() {
-	log "checking resize program installation"
 	if [ `command -v mogrify` ] ; then
-		log "Found 'mogrify':"
+		log "using 'mogrify' to resize images"
 		log "`mogrify -version`"
 		resizer="mogrify"
 	elif [ `command -v resize-gd` ] ; then
-		log "Found 'resize-gd':"
+		log "using 'resize-gd' to resize images"
 		log "`resize-gd --version`"
 		resizer="resize-gd"
 	else
-		echo "Found neither 'mogrify' (package imagemagick) nor 'resize-gd'."
+		echo "No supported image resize program found."
+		echo "Supported are:"
+		echo "- 'mogrify' (from package 'imagemagick')"
+		echo "- 'resize-gd'"
 		echo "ABORT"
 		exit 2
 	fi
@@ -117,7 +119,8 @@ resize() {
 		resize-gd "$1" "$2"
 	else
 		echo "No resize program available."
-		echo "It's probably a program bug if you see this message."
+		echo
+		echo "It's most likely a program bug if you see this message."
 		echo "Please contact the author or maintainer (see man page)."
 		echo "ABORT"
 		exit 2
