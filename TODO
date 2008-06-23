@@ -2,10 +2,7 @@ TODO:
 
 - security checks
 
-- navigation in pic pages (really?)
-
 - verify that input files are images
-	convert doesnt always return an error code if it is no supported image type
+	mogrify doesnt always return an error code if it is no supported image type
 	so is the problem with gimp's xcf format
-
-- verify picture and thumbnail sizes are numbers
+	(is that solvable in any case??)

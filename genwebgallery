@@ -202,12 +202,12 @@ while [ "$#" -ge 1 ] && [ "`echo "$1" | awk '{print substr($0,1,1)}'`" = '-' ] ;
 			shift
 			;;
 		'-ps' | '--pic-size')
-			sizePic="$2"
+			sizePic="`echo "$2" | awk '{printf("%d",$0)}'`"
 			shift
 			shift
 			;;
 		'-ts' | '--thumb-size')
-			sizeThumb="$2"
+			sizeThumb="`echo "$2" | awk '{printf("%d",$0)}'`"
 			shift
 			shift
 			;;
@@ -255,6 +255,13 @@ if [ "$galleryTitle" != "" ] ; then
 fi
 
 for i in "$@" ; do
+	# skip over invalid files
+	if [ ! -f "$i" ] ; then
+		log "does not exist, or no regular file: $i"
+		log "  skipping"
+		continue
+	fi
+
 	file="`basename $i`"
 	targetFile="$targetDir/$file.htm"
 	log "processing file: $file"
