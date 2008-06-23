@@ -1,7 +1,7 @@
-.TH GENWEBGALLERY 1 "genwebgallery\-0.7" "2008\-06\-05" "genwebgallery"
+.TH GENWEBGALLERY 1 "genwebgallery\-0.8" "2008\-06\-23" "genwebgallery"
 
 .SH NAME
-genwebgallery \- generates  minimalistic web galleries
+genwebgallery \- generates minimalistic web galleries
 
 .SH SYNOPSIS
 .B genwebgallery [OPTIONS] PICTURES
@@ -14,13 +14,20 @@ All generated content goes in a subdirectory which defaults to
 .IR webgallery .
 Or any other directory specified by \-\-output.
 .PP
-Files are skipped if
-.B convert
-fails in conversion.
+Files are skipped if resizing is not successful. So it depends on the resize program.
 .PP
 The
-.BR convert
-tool from ImageMagick is required.
+.BR mogrify
+tool from ImageMagick, or
+.BR resize\-gd
+is required.
+
+.B mogrify
+is the prefered resizing tool, cause of its (assumed) better quality.
+.B resize\-gd
+on the other hand has much less dependencies, but still provides everything that's needed here. It is used, if
+.B mogrify
+is not installed. If none of them is available, the program will abort.
 
 .SH OPTIONS
 .TP
@@ -86,10 +93,10 @@ and each picture in large, small and a HTML for it. All HTML pages are titled wi
 Any other error
 .TP
 .B 2
-The required program
-.B convert
-could not be found. It's probably not installed.
-Normally it is provided by the ImageMagick tool collection.
+None of the supported image resize programs was found. These are:
+.B mogrify
+from the ImageMagick tool collection, and
+.B resize\-gd
 .TP
 .B 3
 The output directory already exists and the user wanted to keep it.
@@ -98,16 +105,17 @@ The output directory already exists and the user wanted to keep it.
 The output directory already exists and the user wanted it to be deleted, but it was not possible.
 
 .SH BUGS
-.B convert
+.B mogrify
 fails the conversion of the XCF image format of GIMP, but it exits with 0 anyway. This looks like a bug in the
-.B convert
+.B mogrify
 program.
 As result the image is added to the gallery but it is not viewable.
 Other formats might be affected as well.
 
 .SH SEE ALSO
-.BR convert (1),
-.BR ImageMagick (1).
+.BR mogrify (1),
+.BR ImageMagick (1),
+.BR resize\-gd (1).
 
 .SH AUTHOR
 genwebgallery and this man page were written by markus schnalke <meillo@marmaro.de>
