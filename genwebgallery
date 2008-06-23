@@ -168,7 +168,7 @@ homepage: http://prog.marmaro.de/genwebgallery
 
 # option processing
 
-while [ "$#" -ge 1 ] && [ "`echo "$1" | awk '{print substr($0,1,1)}'`" = '-'  ] ; do
+while [ "$#" -ge 1 ] && [ "`echo "$1" | awk '{print substr($0,1,1)}'`" = '-' ] ; do
 	case $1 in
 		'--version')
 			echo "$PROGRAM version $VERSION"
