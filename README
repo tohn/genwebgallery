@@ -1,0 +1,22 @@
+genwebgallery
+
+this is a fork from markus schnalke (marmaro.de).
+thanks for your project :)
+
+the description of his project can be found here: http://marmaro.de/prog/genwebgallery/
+and the hg-repo here: http://hg.marmaro.de/genwebgallery/
+
+i'm not using hg, so i decided, to give hg2git a try: http://webonrails.com/2009/02/19/export-mercurialhg-repository-to-git-repository/
+
+my steps:
+ 1021  cd repos
+ 1023  hg clone http://hg.marmaro.de/genwebgallery/
+ 1024  git clone git://repo.or.cz/fast-export.git
+ 1029  mkdir genwebgallery-git
+ 1031  cd genwebgallery-git
+ 1032  git init
+ 1033  ../fast-export/hg-fast-export.sh -r ../genwebgallery
+ 1036  git repack -a -d -f
+ 1040  git checkout master
+ 1044  git remote add origin git@github.com:tohn/genwebgallery.git
+ 1045  git push origin master
